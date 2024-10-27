@@ -1,9 +1,18 @@
 ARG ALPINE_VERSION=latest
-ARG BABELD_VERSION=1.13.1-r0
+
+FROM alpine:${ALPINE_VERSION} AS build
+
+WORKDIR /usr/src/babeld
+RUN apk add --no-cache --update alpine-sdk linux-headers
+COPY babeld /usr/src/babeld
+ARG nproc=1
+
+RUN make -j${nproc} && \
+    strip babeld
 
 FROM alpine:${ALPINE_VERSION}
-ARG BABELD_VERSION
-RUN apk add --no-cache --update babeld=${BABELD_VERSION} jq
+RUN apk add --no-cache --update jq
+COPY --from=build /usr/src/babeld/babeld /usr/local/bin/babeld
 
 ENV BABELD_INTERFACES="" \
     BABELD_CONFIG_FILE="" \

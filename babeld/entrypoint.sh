@@ -18,7 +18,7 @@ shutdown() {
 trap shutdown TERM INT
 
 COMMAND_LINE_OPTIONS=""
-BABELD_LOCATION=/usr/bin/babeld
+BABELD_LOCATION="/usr/local/bin/babeld"
 
 # helper functions to handle options
 add_binary_option() {
