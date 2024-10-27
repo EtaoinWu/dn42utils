@@ -2,7 +2,8 @@ ARG ALPINE_VERSION=latest
 ARG BABELD_VERSION=1.13.1-r0
 
 FROM alpine:${ALPINE_VERSION}
-RUN apk add --no-cache --update babeld=${BABELD_VERSION} yq
+ARG BABELD_VERSION
+RUN apk add --no-cache --update babeld=${BABELD_VERSION} jq
 
 ENV BABELD_INTERFACES="eth0"
 ENV BABELD_CONFIG_FILE=""
