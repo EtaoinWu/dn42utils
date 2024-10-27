@@ -6,6 +6,22 @@ This repository provides a container setup for running a `babeld` server. Babeld
 
 By default the container fetches the configuration file from `/data/babeld.conf` and puts its state in `/data/babel-state`. We recommend mounting `/data` to a volume on the host.
 
+```bash
+docker run -d -v /path/to/babeld_data:/data --network host --cap-add=NET_ADMIN etaoinwu/babeld
+# OR, if you want to run it in an existing network namespace
+podman run -d -v /path/to/babeld_data/:/data/ --network ns:/var/run/netns/ns42 etaoinwu/babeld
+```
+
+You will need to either use `--privileged`, or have `skip-kernel-setup true` in your configuration file; if you do so you also need to manually set these `sysctl` entries on the host:
+
+```
+net.ipv4.conf.all.forwarding = 1
+net.ipv6.conf.all.forwarding = 1
+net.ipv4.conf.all.rp_filter = 0
+net.ipv4.conf.default.rp_filter = 0
+net.ipv6.conf.all.accept_redirects = 0
+```
+
 ### Environment Variables
 
 The following environment variables are supported.
